@@ -1,0 +1,33 @@
+allprojects {
+    group = 'com.manning.gia'
+    version = '0.1'
+}
+subprojects {
+    apply plugin: 'java'
+
+
+    ext.configDir = new File(rootDir, 'config')
+    apply from: "$rootDir/myGradleScript/jdepend.gradle"
+
+    jdepend {
+        toolVersion = '2.9.1'
+        ignoreFailures = true
+        sourceSets = sourceSets.findAll{it.name == 'main'}
+    }
+
+    tasks.withType(JDepend) {
+        reports {
+            text.enabled = false
+            xml.enabled = true
+        }
+    }
+    repositories {
+        maven {
+            url "https://repo1.maven.org/maven2/"
+        }
+
+        maven {
+            url "https://repo.spring.io/plugins-release/"
+        }
+    }
+}
